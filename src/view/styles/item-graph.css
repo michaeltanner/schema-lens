@@ -1,0 +1,418 @@
+/* ── Topology Container ── */
+.topology-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.topology-container {
+  background: var(--background);
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.topology-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.topology-header h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--foreground-muted);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.topology-search-input {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px 6px 32px;
+  font-size: 12px;
+  color: var(--foreground);
+  width: 200px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', sans-serif;
+}
+
+.topology-search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  width: 280px;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--foreground);
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+.topology-body {
+  flex: 1;
+  position: relative;
+  background: var(--background);
+}
+
+.topology-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0.5;
+}
+
+/* ── Schema Node Redesign ── */
+.schema-node {
+  padding: 0;
+  border-radius: 12px;
+  background: rgba(23, 23, 23, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 250px;
+  position: relative;
+  overflow: visible;
+}
+
+.node-indicator {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  z-index: 1;
+}
+
+.schema-node.hovered {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.schema-node.root-node {
+  border: 1.5px solid var(--accent);
+  box-shadow: 0 0 25px rgba(96, 165, 250, 0.15);
+}
+
+.node-floating-actions {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  display: flex;
+  gap: 6px;
+  background: var(--surface);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.node-floating-actions.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.floating-action-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--foreground-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.floating-action-btn:hover {
+  background: var(--background);
+  color: var(--accent);
+}
+
+.handle-wrapper {
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  z-index: 5;
+}
+
+.handle-wrapper.left { left: -10px; }
+.handle-wrapper.right { right: -10px; }
+
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: var(--border);
+  border: 2px solid var(--surface);
+  transition: all 0.2s;
+}
+
+.schema-node:hover .react-flow__handle {
+  background: var(--accent);
+  transform: scale(1.2) translateY(-50%);
+}
+
+.handle-badge {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 6;
+  color: var(--foreground-muted);
+}
+
+.handle-badge:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: scale(1.1);
+}
+
+.handle-badge.parents { left: -12px; top: -12px; }
+.handle-badge.children { right: -12px; top: -12px; }
+
+.handle-badge.collapsed {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  width: auto;
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+}
+
+.child-count-bubble {
+  font-size: 9px;
+  font-weight: 800;
+}
+
+/* ── Tooltip Styles ── */
+.node-tooltip {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.node-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tooltip-type {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--foreground-muted);
+  background: var(--background);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tooltip-ns {
+  font-size: 10px;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tooltip-doc {
+  font-size: 11px;
+  color: var(--foreground-muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.schema-node-content {
+  padding: 16px 16px 16px 20px;
+}
+
+.schema-node-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.schema-node-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.schema-node:hover .schema-node-icon {
+  transform: scale(1.05);
+}
+
+.schema-node-label-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.schema-node-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.schema-node-type-label {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.namespace-node {
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: rgba(167, 139, 250, 0.05);
+  border: 1px dashed rgba(167, 139, 250, 0.3);
+  color: #a78bfa;
+  font-weight: 600;
+  font-size: 13px;
+  backdrop-filter: blur(4px);
+}
+
+.react-flow__edge-path {
+  stroke: var(--border);
+  stroke-width: 1.5;
+  transition: stroke 0.3s, stroke-width 0.3s;
+}
+
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 5;
+  animation: dashdraw 0.5s linear infinite;
+}
+
+@keyframes dashdraw {
+  from { stroke-dashoffset: 10; }
+  to { stroke-dashoffset: 0; }
+}
+
+.react-flow__controls {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.react-flow__controls-button {
+  background: var(--surface) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  fill: var(--foreground-muted) !important;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--background) !important;
+  fill: var(--accent) !important;
+}

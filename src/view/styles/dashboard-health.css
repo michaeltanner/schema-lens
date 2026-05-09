@@ -1,0 +1,154 @@
+/* Health Section Styles */
+
+.health-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.health-section.broken {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+}
+
+.health-section.healthy {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+}
+
+.health-icon {
+  flex-shrink: 0;
+}
+
+.broken .health-icon { color: #ef4444; }
+.healthy .health-icon { color: #10b981; }
+
+.health-status {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #10b981;
+  letter-spacing: 0.05em;
+}
+
+.error-count {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ef4444;
+  letter-spacing: 0.05em;
+}
+
+.health-desc {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.health-tip {
+  display: block;
+  margin-top: 0.5rem;
+  color: #f59e0b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.error-scroll-area {
+  max-height: 240px;
+  overflow-y: auto;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+}
+
+.error-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.error-table th {
+  padding: 0.75rem 1rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  opacity: 0.4;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+}
+
+.error-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.error-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.error-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.3rem;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.error-badge.duplicate_item {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.error-badge.missing_reference {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.error-text {
+  font-weight: 600;
+  color: var(--foreground);
+  opacity: 0.9;
+}
+
+.mono-text {
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0.6;
+}
+
+.health-card p {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.inline-link {
+  background: none;
+  border: none;
+  color: #f59e0b;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  transition: opacity 0.2s;
+}
+
+.inline-link:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,174 @@
+.ks-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  animation: ks-fade-in 0.15s ease;
+}
+
+@keyframes ks-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ks-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  width: 95%;
+  max-width: 840px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: ks-slide-up 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes ks-slide-up {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header */
+.ks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, transparent 100%);
+}
+
+.ks-title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.ks-close {
+  background: transparent;
+  border: none;
+  color: var(--foreground);
+  opacity: 0.4;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.375rem;
+  border-radius: 0.5rem;
+  transition: all 0.15s;
+}
+
+.ks-close:hover {
+  opacity: 1;
+  background: var(--surface-hover);
+}
+
+/* Body */
+.ks-body {
+  padding: 1.5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem 3rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .ks-body {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.ks-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ks-group-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.8;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.ks-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.15s;
+}
+
+.ks-row:hover {
+  background: var(--surface-hover);
+}
+
+.ks-desc {
+  font-size: 0.8125rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+.ks-keys {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.ks-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--foreground);
+  min-width: 1.5rem;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.ks-key--sm {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.ks-then {
+  font-size: 0.625rem;
+  opacity: 0.35;
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Footer */
+.ks-footer {
+  padding: 1rem 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  opacity: 0.4;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: var(--background);
+}

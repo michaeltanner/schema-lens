@@ -1,0 +1,17 @@
+{
+  "name": "SchemaLens",
+  "short_name": "SchemaLens",
+  "description": "High-performance UCI XSD schema navigator and visualizer.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "/assets/logos/schemalens_logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

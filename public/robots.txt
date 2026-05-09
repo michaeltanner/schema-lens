@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemaps (if you add one later)
+# Sitemap: https://schemalens.com/sitemap.xml

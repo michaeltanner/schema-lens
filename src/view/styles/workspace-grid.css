@@ -1,0 +1,310 @@
+/* File Grid & Card Styles */
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.file-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s;
+  min-width: 0;
+}
+
+.file-card.disabled {
+  opacity: 0.6;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.file-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--surface-hover);
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.toggle-state-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  flex-shrink: 0;
+}
+
+.toggle-state-btn.enabled {
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+}
+
+.toggle-state-btn.disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--foreground);
+  opacity: 0.3;
+}
+
+.toggle-state-btn:hover {
+  transform: scale(1.05);
+  border-color: currentColor;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.file-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'JetBrains Mono', monospace;
+  min-width: 0;
+  flex: 1;
+}
+
+.source-tag {
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.3rem;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.source-tag.project {
+  background: rgba(167, 139, 250, 0.1);
+  color: #a78bfa;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+}
+
+.source-tag.upload {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.source-tag.remote {
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.file-meta {
+  font-size: 0.65rem;
+  opacity: 0.3;
+  margin-top: 0.1rem;
+}
+
+.file-card:hover .delete-btn,
+.file-card:hover .download-btn,
+.file-card:hover .view-btn {
+  opacity: 0.6;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.delete-btn, .download-btn, .view-btn {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.2;
+}
+
+.delete-btn {
+  color: #ef4444;
+}
+
+.download-btn {
+  color: var(--accent);
+}
+
+.view-btn {
+  color: var(--foreground);
+}
+
+.delete-btn:hover {
+  opacity: 1 !important;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.download-btn:hover {
+  opacity: 1 !important;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.view-btn:hover {
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.remote-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 0.5rem;
+  color: #34d399;
+  opacity: 0.2;
+  transition: all 0.2s;
+}
+
+.remote-link-btn:hover {
+  opacity: 1 !important;
+  background: rgba(52, 211, 153, 0.1);
+  transform: translateY(-1px);
+}
+
+.add-card {
+  border: 2px dashed var(--border);
+  background: transparent;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--foreground);
+  opacity: 0.4;
+}
+
+.add-card:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(59, 130, 246, 0.05);
+  opacity: 1;
+}
+
+.add-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.2;
+}
+
+.file-grid.is-empty {
+  grid-template-columns: 1fr;
+}
+
+.add-card.hero-add {
+  padding: 4rem 2rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-width: 3px;
+  border-color: rgba(59, 130, 246, 0.3);
+  opacity: 1;
+  gap: 1.5rem;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  animation: addPulse 3s infinite ease-in-out;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.add-card.hero-add:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+
+@keyframes addPulse {
+  0% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+  50% { border-color: rgba(59, 130, 246, 0.6); box-shadow: 0 0 40px rgba(59, 130, 246, 0.2); }
+  100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+}
+
+.add-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-card.hero-add span {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.add-card.hero-add p {
+  font-size: 0.85rem;
+  opacity: 0.5;
+  margin: 0;
+  font-weight: 500;
+}
+
+.add-card span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .file-grid { grid-template-columns: 1fr; width: 100%; min-width: 0; }
+}
+
+@media (max-width: 600px) {
+  .file-card { flex-direction: column; align-items: stretch; gap: 0.75rem; padding: 1rem; }
+  .card-actions { 
+    width: 100%; 
+    justify-content: flex-end; 
+    border-top: 1px solid var(--border); 
+    padding-top: 0.75rem; 
+    margin-top: 0.25rem;
+    gap: 0.5rem;
+  }
+  .card-actions button, .card-actions a {
+    opacity: 0.9 !important;
+    background: rgba(255, 255, 255, 0.04);
+    width: 36px;
+    height: 36px;
+  }
+  .toggle-state-btn { order: -1; }
+}
+
+@media (max-width: 480px) {
+  .file-info { width: 100%; gap: 0.75rem; min-width: 0; }
+  .file-name { font-size: 0.75rem; max-width: none; flex: 1; }
+}
