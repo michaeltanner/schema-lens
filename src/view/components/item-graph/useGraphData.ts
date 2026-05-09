@@ -28,7 +28,6 @@ export function useGraphData({
   const [loading, setLoading] = useState(true);
   
   const fetchTopology = useCallback(async () => {
-    setLoading(true);
     try {
       const url = rootNode ? `/api/item/graph?node=${encodeURIComponent(rootNode)}` : '/api/item/graph';
       const res = await fetch(url);
@@ -91,11 +90,23 @@ export function useGraphData({
     } finally {
       setLoading(false);
     }
-  }, [rootNode, collapsedChildren, collapsedParents, handleInspect, handleFocus, toggleChildren, toggleParents, setHoveredNodeId]);
+  }, [rootNode, collapsedChildren, collapsedParents, handleInspect, handleFocus, toggleChildren, toggleParents, setHoveredNodeId, setNodes, setEdges]);
+
+  const [prevTrigger, setPrevTrigger] = useState({ rootNode, collapsedChildren, collapsedParents });
+
+  // Reset loading immediately when dependencies change to avoid cascading renders
+  if (rootNode !== prevTrigger.rootNode || collapsedChildren !== prevTrigger.collapsedChildren || collapsedParents !== prevTrigger.collapsedParents) {
+    setPrevTrigger({ rootNode, collapsedChildren, collapsedParents });
+    setLoading(true);
+  }
 
   useEffect(() => {
-    fetchTopology();
+    const triggerFetch = async () => {
+      await fetchTopology();
+    };
+    triggerFetch();
   }, [fetchTopology]);
+
 
   return { nodes, edges, loading, onNodesChange, onEdgesChange, setNodes, setEdges };
 }

@@ -10,11 +10,20 @@ export function useItemNode(name: string | undefined, type: string | undefined) 
   const [error, setError] = useState<string | null>(null);
   const { lastUpdated } = useWorkspaceStore();
 
+  const [prevTrigger, setPrevTrigger] = useState({ name, type, lastUpdated });
+
+  // Reset state immediately when dependencies change to avoid cascading renders
+  if (name !== prevTrigger.name || type !== prevTrigger.type || lastUpdated !== prevTrigger.lastUpdated) {
+    setPrevTrigger({ name, type, lastUpdated });
+    setItemNode(null);
+    setError(null);
+  }
+
   useEffect(() => {
     if (!name || !type) {
-      setItemNode(null);
       return;
     }
+
 
     const fetchItemNode = async () => {
       setIsLoading(true);

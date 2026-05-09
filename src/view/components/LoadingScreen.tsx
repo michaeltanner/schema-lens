@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import '@/view/styles/loading.css';
 
 export const LoadingScreen: React.FC<{ message?: string }> = ({ message = 'Initializing SchemaLens...' }) => {
@@ -7,10 +8,13 @@ export const LoadingScreen: React.FC<{ message?: string }> = ({ message = 'Initi
     <div className="loading-screen">
       <div className="loading-content">
         <div className="logo-wrapper">
-          <img 
+          <Image 
             src="/assets/logos/schemalens_logo.png" 
             alt="SchemaLens" 
             className="loading-logo" 
+            width={120}
+            height={120}
+            priority
           />
         </div>
         

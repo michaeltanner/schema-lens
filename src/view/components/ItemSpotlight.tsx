@@ -11,8 +11,9 @@ import '@/view/styles/item-spotlight.css';
 export const ItemSpotlight: React.FC = () => {
   const { summary, isSpotlightOpen, setSpotlightOpen, navigate } = useSchemaStore();
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [prevQuery, setPrevQuery] = useState('');
+  const [prevIsSpotlightOpen, setPrevIsSpotlightOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -45,29 +46,35 @@ export const ItemSpotlight: React.FC = () => {
     return doc;
   }, [summary]);
 
+  // Reset query when spotlight opens
+  if (isSpotlightOpen && !prevIsSpotlightOpen) {
+    setPrevIsSpotlightOpen(true);
+    setQuery('');
+  } else if (!isSpotlightOpen && prevIsSpotlightOpen) {
+    setPrevIsSpotlightOpen(false);
+  }
+
+  // Derive results from query
+  const results = useMemo(() => {
+    if (!query) return [];
+    const searchResults = index.search(query, { enrich: true });
+    if (searchResults.length > 0) {
+      return searchResults[0].result.map((r: any) => r.doc);
+    }
+    return [];
+  }, [query, index]);
+
+  // Reset selection when query changes
+  if (query !== prevQuery) {
+    setPrevQuery(query);
+    setSelectedIndex(0);
+  }
+
   useEffect(() => {
     if (isSpotlightOpen) {
       inputRef.current?.focus();
-      setQuery('');
     }
   }, [isSpotlightOpen]);
-
-  useEffect(() => {
-    if (!query) {
-      setResults([]);
-      return;
-    }
-
-    const searchResults = index.search(query, { enrich: true });
-    if (searchResults.length > 0) {
-      const combined = searchResults[0].result.map((r: any) => r.doc);
-      setResults(combined);
-      setSelectedIndex(0);
-    } else {
-      setResults([]);
-      setSelectedIndex(0);
-    }
-  }, [query, index]);
 
   useEffect(() => {
     if (resultsRef.current && selectedIndex >= 0) {
@@ -156,7 +163,7 @@ export const ItemSpotlight: React.FC = () => {
               />
             ))
           ) : query ? (
-            <div className="spotlight-empty">No results found for "{query}"</div>
+            <div className="spotlight-empty">No results found for &quot;{query}&quot;</div>
           ) : (
             <div className="spotlight-hint">
               <Command size={14} />

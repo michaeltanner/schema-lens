@@ -31,9 +31,22 @@ export const useWorkspaceFiles = () => {
     }
   }, []);
 
+  const [prevLastUpdated, setPrevLastUpdated] = useState(lastUpdated);
+
+  // Reset loading immediately when dependencies change to avoid cascading renders
+  if (lastUpdated !== prevLastUpdated) {
+    setPrevLastUpdated(lastUpdated);
+    setLoading(true);
+  }
+
   useEffect(() => {
-    fetchFiles();
+    const triggerFetch = async () => {
+      await fetchFiles();
+    };
+    triggerFetch();
   }, [fetchFiles, lastUpdated]);
+
+
 
   const handleUpload = async (filesToUpload: FileList | File[] | null) => {
     if (!filesToUpload || filesToUpload.length === 0) return;

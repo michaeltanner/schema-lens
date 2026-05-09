@@ -12,6 +12,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import Image from 'next/image';
 import { HealthDrawer } from './header/HealthDrawer';
 import '@/view/styles/header.css';
 
@@ -57,7 +58,14 @@ export const Header: React.FC = () => {
 
         <button className="logo-btn" onClick={goHome} title="Go to Home Screen">
           <div className="logo-container hifi">
-            <img src="/assets/logos/schemalens_logo.png" alt="SchemaLens Logo" className="logo-img" />
+            <Image 
+              src="/assets/logos/schemalens_logo.png" 
+              alt="SchemaLens Logo" 
+              className="logo-img" 
+              width={32} 
+              height={32} 
+              priority
+            />
             <div className="logo-glow prism-hifi" />
           </div>
           <span className="logo-text">

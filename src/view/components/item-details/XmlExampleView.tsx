@@ -13,9 +13,15 @@ export const XmlExampleView: React.FC<XmlExampleViewProps> = ({ node }) => {
   const [includeOptionalXml, setIncludeOptionalXml] = useState(false);
   const { fetchExample, isLoading } = useItemExample();
   const [xmlExample, setXmlExample] = useState<string | null>(null);
+  const [prevTrigger, setPrevTrigger] = useState({ name: node.name, kind: node.kind, opt: includeOptionalXml });
+
+  // Reset example immediately when dependencies change to avoid cascading renders
+  if (node.name !== prevTrigger.name || node.kind !== prevTrigger.kind || includeOptionalXml !== prevTrigger.opt) {
+    setPrevTrigger({ name: node.name, kind: node.kind, opt: includeOptionalXml });
+    setXmlExample(null);
+  }
 
   useEffect(() => {
-    setXmlExample(null);
     if (node.name) {
       const loadExample = async () => {
         const example = await fetchExample(node.name!, node.kind, includeOptionalXml);
@@ -24,6 +30,7 @@ export const XmlExampleView: React.FC<XmlExampleViewProps> = ({ node }) => {
       loadExample();
     }
   }, [node.name, node.kind, includeOptionalXml, fetchExample]);
+
 
   const handleOptionalToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIncludeOptionalXml(e.target.checked);

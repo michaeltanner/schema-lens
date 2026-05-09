@@ -204,3 +204,6 @@ export const ItemTreeNode: React.FC<TreeNodeProps> = React.memo(({ node, isRoot 
     </div>
   );
 });
+
+ItemTreeNode.displayName = 'ItemTreeNode';
+

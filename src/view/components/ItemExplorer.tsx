@@ -77,7 +77,8 @@ export const ItemExplorer: React.FC = () => {
         return () => clearTimeout(timer);
       }
     }
-  }, [selectedItem?.name, displayItems]);
+  }, [selectedItem, displayItems]);
+
 
   return (
     <div className={`sidebar${sidebarCollapsed ? ' sidebar-collapsed' : ''}${mobileMenuOpen ? ' mobile-open' : ''}`}>

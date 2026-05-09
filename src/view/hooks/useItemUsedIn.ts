@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useWorkspaceStore } from '@/core/store/useWorkspaceStore';
 
 export function useItemUsedIn(name: string | undefined) {
@@ -6,32 +6,36 @@ export function useItemUsedIn(name: string | undefined) {
   const [isLoading, setIsLoading] = useState(false);
   const { lastUpdated } = useWorkspaceStore();
 
-  useEffect(() => {
-    if (!name) {
+  const [prevTrigger, setPrevTrigger] = useState({ name, lastUpdated });
+
+  // Reset state immediately when dependencies change to avoid cascading renders
+  if (name !== prevTrigger.name || lastUpdated !== prevTrigger.lastUpdated) {
+    setPrevTrigger({ name, lastUpdated });
+    setUsedIn([]);
+    if (name) setIsLoading(true);
+  }
+
+  const fetchUsedIn = useCallback(async () => {
+    if (!name) return;
+    
+    try {
+      const res = await fetch(`/api/item/used-in?name=${name}&v=${lastUpdated}`);
+      const data = await res.json();
+      setUsedIn(Array.isArray(data) ? data : []);
+    } catch {
       setUsedIn([]);
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    let isMounted = true;
-    setIsLoading(true);
-
-    fetch(`/api/item/used-in?name=${name}&v=${lastUpdated}`)
-      .then(res => res.json())
-      .then(data => {
-        if (isMounted) {
-          setUsedIn(Array.isArray(data) ? data : []);
-          setIsLoading(false);
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setUsedIn([]);
-          setIsLoading(false);
-        }
-      });
-
-    return () => { isMounted = false; };
   }, [name, lastUpdated]);
+
+  useEffect(() => {
+    const triggerFetch = async () => {
+      await fetchUsedIn();
+    };
+    triggerFetch();
+  }, [fetchUsedIn]);
+
 
   return { usedIn, isLoading };
 }
