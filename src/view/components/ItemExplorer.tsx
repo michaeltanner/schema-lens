@@ -34,7 +34,7 @@ export const ItemExplorer: React.FC = () => {
   const { mobileMenuOpen, setMobileMenuOpen } = useUIStore();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // ── Resizable sidebar ──────────────────────────────────────────────────
+  // Resizable sidebar
   const { sidebarWidth, setSidebarWidth } = useUIStore();
   const isResizingRef = useRef(false);
   const resizeStartXRef = useRef(0);
@@ -66,8 +66,7 @@ export const ItemExplorer: React.FC = () => {
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
   }, [sidebarWidth]);
-  // ────────────────────────────────────────────────────────────────────────
-
+  
   const displayItems = useItemExplorerItems(summary, searchQuery, expandedFolders);
 
   // Auto-focus search input when mobile menu or desktop sidebar opens
@@ -138,6 +137,17 @@ export const ItemExplorer: React.FC = () => {
       <div className="mobile-sheet-grabber" onClick={() => setMobileMenuOpen(false)}>
         <div className="grabber-bar" />
       </div>
+
+      {/* Full-height expand strip — only visible when sidebar is collapsed */}
+      {sidebarCollapsed && (
+        <div
+          className="sidebar-expand-edge"
+          onClick={toggleSidebar}
+          title="Expand Sidebar"
+          role="button"
+          aria-label="Expand Sidebar"
+        />
+      )}
 
       <div className="sidebar-handle">
         <button
@@ -231,7 +241,6 @@ export const ItemExplorer: React.FC = () => {
           )}
         </div>
       </div>
-      {/* Drag handle for resizing — hidden on mobile (handled by sheet) */}
       {!sidebarCollapsed && (
         <div
           className="sidebar-resize-handle"

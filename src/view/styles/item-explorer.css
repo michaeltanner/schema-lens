@@ -159,6 +159,30 @@
   right: -24px; /* Move out slightly when collapsed */
 }
 
+/* Full-height clickable strip along the left edge when the sidebar is collapsed.
+   Positioned fixed so it spans the entire viewport height regardless of scroll. */
+.sidebar-expand-edge {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100vh;
+  z-index: 200;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.sidebar-expand-edge:hover {
+  background: rgba(var(--accent-rgb), 0.25);
+}
+
+@media (max-width: 768px) {
+  .sidebar-expand-edge {
+    display: none;
+  }
+}
+
 .sidebar-header {
   padding: 1.25rem;
   border-bottom: 1px solid var(--border);
