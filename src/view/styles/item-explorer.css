@@ -1,3 +1,27 @@
+/* Sidebar Resize Handle */
+.sidebar-resize-handle {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  z-index: 60;
+  /* Invisible by default; a thin accent stripe appears on hover */
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle:active {
+  background: var(--accent);
+  opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+  .sidebar-resize-handle { display: none; }
+}
+
 /* Sidebar Styles */
 .sidebar {
   width: 320px;

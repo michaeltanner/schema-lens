@@ -238,7 +238,6 @@ h1 {
   font-size: 0.75rem;
   opacity: 0.5;
   font-family: var(--font-sans);
-  max-width: 700px;
   line-height: 1.4;
   border-left: 2px solid var(--accent-glow);
   padding-left: 0.75rem;

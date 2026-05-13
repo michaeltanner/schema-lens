@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+const SIDEBAR_DEFAULT_WIDTH = 320;
+
 interface UIState {
   sidebarCollapsed: boolean;
   isSpotlightOpen: boolean;
@@ -19,7 +21,9 @@ interface UIState {
   isImportWizardOpen: boolean;
   mobileMenuOpen: boolean;
   itemExpansionSignal: { type: 'expand' | 'collapse'; timestamp: number } | null;
+  sidebarWidth: number;
   toggleSidebar: () => void;
+  setSidebarWidth: (width: number) => void;
   setSpotlightOpen: (open: boolean) => void;
   setShortcutsOpen: (open: boolean) => void;
   setMobileMenuOpen: (open: boolean) => void;
@@ -46,7 +50,9 @@ export const useUIStore = create<UIState>((set) => ({
   isImportWizardOpen: false,
   mobileMenuOpen: false,
   itemExpansionSignal: null,
+  sidebarWidth: SIDEBAR_DEFAULT_WIDTH,
   toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+  setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
   setSpotlightOpen: (isSpotlightOpen) => set({ isSpotlightOpen }),
   setShortcutsOpen: (isShortcutsOpen) => set({ isShortcutsOpen }),
   setMobileMenuOpen: (mobileMenuOpen) => set({ mobileMenuOpen }),

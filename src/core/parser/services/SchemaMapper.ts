@@ -102,7 +102,22 @@ export class SchemaMapper {
     if (annotation) {
       const doc = annotation['documentation'];
       if (doc) {
-        node.documentation = typeof doc === 'string' ? doc : (doc['#text'] || JSON.stringify(doc));
+        let raw_doc: string;
+        if (typeof doc === 'string') {
+          raw_doc = doc;
+        } else if (Array.isArray(doc)) {
+          // Join/unify sequential <xs:documentation> nodes
+          raw_doc = doc.map((d: unknown) => (typeof d === 'string' ? d : (d as Record<string,string>)['#text'] ?? '')).join('\n');
+        } else {
+          // Extract document content and ignore child element tags in singular <xs:documentation> nodes
+          raw_doc = (doc as Record<string,string>)['#text'] ?? JSON.stringify(doc);
+        }
+        // Replace escaped sequences written as literal text (e.g. \n, \t)
+        // with their actual whitespace equivalents so the UI can render them.
+        node.documentation = raw_doc
+          .replace(/\\n/g, '\n')
+          .replace(/\\t/g, '\t')
+          .replace(/\\r/g, '');
       }
     }
 

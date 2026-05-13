@@ -13,6 +13,7 @@ export const useKeyboardShortcuts = () => {
     isShortcutsOpen,
     goHome,
     goBack,
+    goForward,
     toggleBookmark,
     setViewMode,
     expandAll,
@@ -54,6 +55,21 @@ export const useKeyboardShortcuts = () => {
       if (key === '[') {
         e.preventDefault();
         toggleSidebar();
+      }
+
+      // Alt+ArrowLeft → GoBack  (Alt+Tab is captured by the OS before the browser
+      // sees it, so it cannot be reliably intercepted in a web app)
+      if (e.altKey && key === 'arrowleft') {
+        e.preventDefault();
+        goBack();
+        return;
+      }
+
+      // Alt+ArrowRight → GoForward
+      if (e.altKey && key === 'arrowright') {
+        e.preventDefault();
+        goForward();
+        return;
       }
 
       // Show keyboard shortcuts with ?
@@ -115,11 +131,14 @@ export const useKeyboardShortcuts = () => {
           // Optional: Add a toast notification here if you have one
         }
         
-        // Tab Switching (Direct Number)
-        if (key === '1') { e.preventDefault(); setViewMode('tree'); }
-        if (key === '2') { e.preventDefault(); setViewMode('item'); }
-        if (key === '3') { e.preventDefault(); setViewMode('topology'); }
-        if (key === '4') { e.preventDefault(); setViewMode('example'); }
+        // Tab Switching (Direct Number) — skip when Alt (Windows/Linux) or Cmd
+        // (macOS) is held so the browser/OS can handle those combos natively.
+        if (!e.altKey && !e.metaKey) {
+          if (key === '1') { e.preventDefault(); setViewMode('tree'); }
+          if (key === '2') { e.preventDefault(); setViewMode('item'); }
+          if (key === '3') { e.preventDefault(); setViewMode('topology'); }
+          if (key === '4') { e.preventDefault(); setViewMode('example'); }
+        }
         
         // Tree specific
         if (key === 'e') { e.preventDefault(); setViewMode('tree'); expandItemTree(); }
@@ -181,7 +200,8 @@ export const useKeyboardShortcuts = () => {
     searchQuery, 
     setSearchQuery, 
     goHome, 
-    goBack, 
+    goBack,
+    goForward,
     selectedItem, 
     toggleBookmark, 
     setViewMode, 
