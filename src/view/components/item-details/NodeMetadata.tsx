@@ -1,17 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ItemNode } from '@/types/item';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, HelpCircle } from 'lucide-react';
 import { useSchemaStore } from '@/core/store/useSchemaStore';
+import { interpretRegex } from '@/core/utils/regexInterpreter';
 
 interface NodeMetadataProps {
   node: ItemNode;
 }
 
+/**
+ * Decodes HTML/XML character entities in a string to their Unicode equivalents,
+ * but only when the resulting character is printable (code point ≥ 0x20 and not
+ * the Unicode replacement character 0xFFFD).  Non-printable code points (control
+ * characters, surrogates, etc.) are left as-is so the reader can still see them.
+ *
+ * Handles:
+ *   &amp;  &lt;  &gt;  &quot;  &apos;   — named entities
+ *   &#NNN;                              — decimal numeric references
+ *   &#xHHHH;                            — hex numeric references (case-insensitive)
+ */
+function decodeHtmlEntities(value: string): string {
+  const named: Record<string, string> = {
+    amp: '&', lt: '<', gt: '>', quot: '"', apos: "'",
+  };
+
+  return value.replace(/&(#(?:x[0-9a-f]+|[0-9]+)|[a-z]+);/gi, (match, ref: string) => {
+    if (ref.startsWith('#')) {
+      const cp = ref[1].toLowerCase() === 'x'
+        ? parseInt(ref.slice(2), 16)
+        : parseInt(ref.slice(1), 10);
+      // Only decode printable characters (≥ space, not replacement char)
+      if (cp >= 0x20 && cp !== 0xFFFD) return String.fromCodePoint(cp);
+      return match; // keep non-printable as-is
+    }
+    return named[ref.toLowerCase()] ?? match;
+  });
+}
+
 export const NodeMetadata: React.FC<NodeMetadataProps> = ({ node }) => {
   const { goHome } = useSchemaStore();
-  
+  const [regexExpanded, setRegexExpanded] = useState(false);
+
   const formatHint = node.type?.includes('date') ? 'ISO 8601' : 
                     node.type?.includes('uuid') ? 'UUID' : null;
+
+  const decodedPattern = node.pattern ? decodeHtmlEntities(node.pattern) : null;
+  const interpretation = decodedPattern ? interpretRegex(decodedPattern) : null;
 
   return (
     <div className="node-details-internal">
@@ -45,10 +79,32 @@ export const NodeMetadata: React.FC<NodeMetadataProps> = ({ node }) => {
             </div>
           )}
 
-          {node.pattern && (
-            <div className="property-badge pattern" title="Regular Expression Pattern">
-              <span className="prop-tag">Regex</span>
-              <code>{node.pattern}</code>
+          {decodedPattern && (
+            <div className="regex-badge-wrapper">
+              <div className="property-badge pattern" title="Regular Expression Pattern">
+                <span className="prop-tag">Regex</span>
+                <code>{decodedPattern}</code>
+                <button
+                  className="regex-explain-btn"
+                  title="Explain in plain English"
+                  aria-expanded={regexExpanded}
+                  onClick={() => setRegexExpanded(v => !v)}
+                >
+                  <HelpCircle size={13} />
+                </button>
+              </div>
+              {regexExpanded && interpretation && (
+                <div className="regex-explanation">
+                  <div className="regex-explanation-summary">{interpretation.summary}</div>
+                  {!interpretation.isFallback && interpretation.clauses.length > 1 && (
+                    <ol className="regex-explanation-clauses">
+                      {interpretation.clauses.map((clause, idx) => (
+                        <li key={idx}>{clause}</li>
+                      ))}
+                    </ol>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -106,6 +162,14 @@ export const NodeMetadata: React.FC<NodeMetadataProps> = ({ node }) => {
           background: rgba(var(--accent-rgb), 0.03);
           border-left: 3px solid var(--accent);
           border-radius: 0 4px 4px 0;
+          /* Stretch to fill available width without overflowing */
+          width: auto;
+          min-width: 0;
+          box-sizing: border-box;
+          white-space: pre-wrap;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          tab-size: 4;
         }
         .node-error-alert {
           display: flex;
@@ -176,6 +240,54 @@ export const NodeMetadata: React.FC<NodeMetadataProps> = ({ node }) => {
         .property-badge.source {
           background: rgba(var(--accent-rgb), 0.05);
           border-color: rgba(var(--accent-rgb), 0.2);
+        }
+        .regex-badge-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          max-width: 100%;
+        }
+        .regex-explain-btn {
+          display: inline-flex;
+          align-items: center;
+          background: none;
+          border: none;
+          padding: 0 2px;
+          cursor: pointer;
+          color: var(--text-secondary);
+          opacity: 0.6;
+          transition: opacity 0.15s, color 0.15s;
+          line-height: 1;
+        }
+        .regex-explain-btn:hover,
+        .regex-explain-btn[aria-expanded="true"] {
+          opacity: 1;
+          color: var(--accent);
+        }
+        .regex-explanation {
+          padding: 0.6rem 0.75rem;
+          background: rgba(var(--accent-rgb), 0.05);
+          border: 1px solid rgba(var(--accent-rgb), 0.2);
+          border-radius: 6px;
+          font-size: 0.8rem;
+          color: var(--text-primary);
+          line-height: 1.5;
+          max-width: 480px;
+        }
+        .regex-explanation-summary {
+          font-style: italic;
+          color: var(--text-secondary);
+          margin-bottom: 0.25rem;
+        }
+        .regex-explanation-clauses {
+          margin: 0.4rem 0 0 1rem;
+          padding: 0;
+          list-style: decimal;
+          font-size: 0.78rem;
+          color: var(--text-secondary);
+        }
+        .regex-explanation-clauses li {
+          margin-bottom: 0.15rem;
         }
       `}</style>
     </div>

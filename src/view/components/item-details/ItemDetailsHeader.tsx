@@ -7,7 +7,7 @@ import { useUIStore } from '@/core/store/useUIStore';
 import { useNavigationStore } from '@/core/store/useNavigationStore';
 
 export const ItemDetailsHeader: React.FC = () => {
-  const { selectedItem, history, goBack } = useSchemaStore();
+  const { selectedItem, historyDepth, goBack } = useSchemaStore();
   const { viewMode, setViewMode } = useUIStore();
   const { toggleBookmark, isBookmarked } = useNavigationStore();
 
@@ -17,7 +17,7 @@ export const ItemDetailsHeader: React.FC = () => {
     <header className="item-details-header">
       <div className="item-details-top-bar">
         <div className="item-details-nav">
-          {history.length > 0 && (
+          {historyDepth > 0 && (
             <button className="nav-button" onClick={goBack} title="Go Back">
               <ArrowLeft size={18} />
             </button>

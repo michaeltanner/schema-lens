@@ -1,3 +1,27 @@
+/* Sidebar Resize Handle */
+.sidebar-resize-handle {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  z-index: 60;
+  /* Invisible by default; a thin accent stripe appears on hover */
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle:active {
+  background: var(--accent);
+  opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+  .sidebar-resize-handle { display: none; }
+}
+
 /* Sidebar Styles */
 .sidebar {
   width: 320px;
@@ -133,6 +157,30 @@
 
 .sidebar-collapsed .sidebar-handle {
   right: -24px; /* Move out slightly when collapsed */
+}
+
+/* Full-height clickable strip along the left edge when the sidebar is collapsed.
+   Positioned fixed so it spans the entire viewport height regardless of scroll. */
+.sidebar-expand-edge {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100vh;
+  z-index: 200;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.sidebar-expand-edge:hover {
+  background: rgba(var(--accent-rgb), 0.25);
+}
+
+@media (max-width: 768px) {
+  .sidebar-expand-edge {
+    display: none;
+  }
 }
 
 .sidebar-header {

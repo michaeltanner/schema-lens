@@ -24,6 +24,8 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { keys: ['/'], description: 'Spotlight search' },
       { keys: ['G', 'H'], description: 'Go Home' },
       { keys: ['G', 'B'], description: 'Go Back in history' },
+      { keys: ['Alt', '←'], description: 'Go Back in history' },
+      { keys: ['Alt', '→'], description: 'Go Forward in history' },
       { keys: ['G', 'R'], description: 'Jump to Recent Activity' },
       { keys: ['G', 'S'], description: 'Jump to Pinned Items' },
       { keys: ['G', 'D'], description: 'Jump to Health Dashboard' },

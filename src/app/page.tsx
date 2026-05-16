@@ -13,6 +13,7 @@ import { CustomDialog } from '@/view/components/CustomDialog';
 import { ItemSpotlight } from '@/view/components/ItemSpotlight';
 import { KeyboardShortcutsModal } from '@/view/components/KeyboardShortcutsModal';
 import { useKeyboardShortcuts } from '@/view/hooks/useKeyboardShortcuts';
+import { useUrlSync } from '@/view/hooks/useUrlSync';
 import { useUIStore } from '@/core/store/useUIStore';
 import { LoadingScreen } from '@/view/components/LoadingScreen';
 import { ImportWizard } from '@/view/components/wizard/ImportWizard';
@@ -23,9 +24,6 @@ export default function Home() {
     summary, 
     setSummary, 
     selectedItem, 
-    history, 
-    goBack, 
-    navigate, 
     goHome,
     refreshSummary
   } = useSchemaStore();
@@ -47,6 +45,7 @@ export default function Home() {
 
   const { toggleBookmark, isBookmarked } = useNavigationStore();
   useKeyboardShortcuts();
+  useUrlSync();
 
   // Reset item expansion when item changes
   useEffect(() => {
